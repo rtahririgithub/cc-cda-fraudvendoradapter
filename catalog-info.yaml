@@ -1,0 +1,19 @@
+apiVersion: backstage.io/v1alpha1
+kind: Component
+metadata:
+  name: cc-cda-fraudvendoradapter	
+  description: sample Java app to implement GCP pub/sub
+  tags:
+    - cdo
+    - java
+    - api
+    - aac
+  annotations:
+    backstage.io/techdocs-ref: dir:.
+    github.com/project-slug: telus/cc-cda-fraudvendoradapter	
+    go.telus.com/cmdb-id: 20906
+spec:
+  type: service
+  owner: telus
+  lifecycle: testing
+    

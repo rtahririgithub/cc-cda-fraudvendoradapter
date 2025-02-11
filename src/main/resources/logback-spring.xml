@@ -1,0 +1,66 @@
+<configuration>
+    <!-- Single-line JSON appender example for GCP -->
+    <appender name="CONSOLE_JSON" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+            <providers>
+                <!-- Pattern defining the log message -->
+                <pattern>
+                    <pattern>
+                        {"timestamp": "%date{yyyy-MM-dd'T'HH:mm:ss.SSS'Z'}", "level": "%level" , "thread": "%thread", "logger": "%logger", "message" : "%message %exception{5}", "context": "%contextName"}
+                    </pattern>
+                </pattern>
+            </providers>
+        </encoder>
+    </appender>
+
+    <!-- Pretty JSON appender example for local -->
+    <appender name="CONSOLE_JSON_PRETTY" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder class="ch.qos.logback.core.encoder.LayoutWrappingEncoder">
+            <layout class="ch.qos.logback.contrib.json.classic.JsonLayout">
+
+                <!-- Modifies the timestamp format to fit some pattern -->
+                <timestampFormat>yyyy-MM-dd'T'HH:mm:ss.SSS'Z'</timestampFormat>
+
+                <!-- Modifies the time zone -->
+                <timestampFormatTimezoneId>Etc/UTC</timestampFormatTimezoneId>     
+
+                <!-- Turns single-line json into pretty JSON -->         
+                <jsonFormatter class="ch.qos.logback.contrib.jackson.JacksonJsonFormatter">
+                    <prettyPrint>true</prettyPrint>
+                </jsonFormatter>
+
+            </layout>
+        </encoder>
+    </appender>
+
+    <!--
+    Example profile for logging in a local environment/codespaces. Prints "pretty"
+    JSON logs to the console.
+    -->
+    <springProfile name="default">
+        <root level="ERROR">
+            <appender-ref ref="CONSOLE_JSON_PRETTY"/>
+        </root>
+    </springProfile>
+
+    <!--
+    Example profile for environments "test", "dev", "st", and "pr". Prints single-line
+    JSON logs to the console.
+    -->
+    <springProfile name="local,dev,it01,it02,it03">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE_JSON"/>
+        </root>
+    </springProfile>
+    
+    <springProfile name="it04">
+        <root level="ERROR">
+            <appender-ref ref="CONSOLE_JSON"/>
+        </root>
+    </springProfile>
+     <springProfile name="pr">
+        <root level="ERROR">
+            <appender-ref ref="CONSOLE_JSON"/>
+        </root>
+    </springProfile>       
+</configuration>
